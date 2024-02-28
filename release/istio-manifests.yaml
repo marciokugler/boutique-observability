@@ -48,6 +48,20 @@ spec:
           number: 80
 ---
 apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: frontend
+spec:
+  hosts:
+  - "frontend.default.svc.cluster.local"
+  http:
+  - route:
+    - destination:
+        host: frontend
+        port:
+          number: 80
+---
+apiVersion: networking.istio.io/v1alpha3
 kind: ServiceEntry
 metadata:
   name: allow-egress-googleapis
@@ -79,18 +93,4 @@ spec:
   - number: 443
     name: https
     protocol: HTTPS
----
-apiVersion: networking.istio.io/v1alpha3
-kind: VirtualService
-metadata:
-  name: frontend
-spec:
-  hosts:
-  - "frontend.default.svc.cluster.local"
-  http:
-  - route:
-    - destination:
-        host: frontend
-        port:
-          number: 80
 ---
