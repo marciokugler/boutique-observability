@@ -35,9 +35,9 @@ spec:
         - name: PORT
           value: "50051"
         - name: OTEL_EXPORTER_OTLP_TRACES_ENDPOINT
-          value: "http://otelcollector:4317"
+          value: "http://appdynamics-otel-collector-service.appdynamics.svc.cluster.local:4317"
         - name: OTEL_RESOURCE_ATTRIBUTES
-          value: "service.name=shippingservice,service.version=1.0.0"
+          value: "service.name=webstore-shippingservice,service.version=1.0.0"
         readinessProbe:
           periodSeconds: 5
           exec:
