@@ -33,7 +33,7 @@ spec:
       terminationGracePeriodSeconds: 5
       containers:
       - name: server
-        image: marciokugler/productcatalogservice:v1.1.1
+        image: marciokugler/productcatalogservice:v1.1.2
         ports:
         - containerPort: 3550
         env:
@@ -81,7 +81,7 @@ spec:
       terminationGracePeriodSeconds: 5
       containers:
       - name: server
-        image: marciokugler/emailservice:v1.1.1
+        image: marciokugler/emailservice:v1.1.2
         ports:
         - containerPort: 8080
         env:
@@ -129,7 +129,7 @@ spec:
       terminationGracePeriodSeconds: 5
       containers:
       - name: server
-        image: marciokugler/cartservice:v1.1.1
+        image: marciokugler/cartservice:v1.1.2
         ports:
         - containerPort: 7070
         env:
@@ -177,7 +177,7 @@ spec:
       serviceAccountName: default
       containers:
         - name: server
-          image: marciokugler/frontend:v1.1.1
+          image: marciokugler/frontend:v1.1.2
           ports:
           - containerPort: 8080
           readinessProbe:
@@ -274,7 +274,7 @@ spec:
       terminationGracePeriodSeconds: 5
       containers:
       - name: server
-        image: marciokugler/paymentservice:v1.1.1
+        image: marciokugler/paymentservice:v1.1.2
         ports:
         - containerPort: 50051
         env:
@@ -322,7 +322,7 @@ spec:
       terminationGracePeriodSeconds: 5
       containers:
       - name: server
-        image: marciokugler/recommendationservice:v1.1.1
+        image: marciokugler/recommendationservice:v1.1.2
         ports:
         - containerPort: 8080
         env:
@@ -371,7 +371,7 @@ spec:
       serviceAccountName: default
       containers:
       - name: server
-        image: marciokugler/shippingservice:v1.1.1
+        image: marciokugler/shippingservice:v1.1.2
         ports:
         - containerPort: 50051
         env:
@@ -419,7 +419,7 @@ spec:
       terminationGracePeriodSeconds: 5
       containers:
       - name: server
-        image: marciokugler/currencyservice:v1.1.1
+        image: marciokugler/currencyservice:v1.1.2
         ports:
         - name: grpc
           containerPort: 7000
@@ -468,7 +468,7 @@ spec:
       terminationGracePeriodSeconds: 5
       containers:
       - name: server
-        image: marciokugler/adservice:v1.1.1
+        image: marciokugler/adservice:v1.1.2
         ports:
         - containerPort: 9555
         env:
@@ -516,7 +516,7 @@ spec:
       serviceAccountName: default
       containers:
         - name: server
-          image: marciokugler/checkoutservice:v1.1.1
+          image: marciokugler/checkoutservice:v1.1.2
           ports:
           - containerPort: 5050
           env:
@@ -629,39 +629,54 @@ spec:
       serviceAccountName: default
       terminationGracePeriodSeconds: 5
       restartPolicy: Always
-      initContainers:
-      - command:
-        - /bin/sh
-        - -exc
-        - |
-          echo "Init container pinging frontend: ${FRONTEND_ADDR}..."
-          STATUSCODE=$(wget --server-response http://${FRONTEND_ADDR} 2>&1 | awk '/^  HTTP/{print $2}')
-          if test $STATUSCODE -ne 200; then
-              echo "Error: Could not reach frontend - Status code: ${STATUSCODE}"
-              exit 1
-          fi
-        name: frontend-check
-        image: busybox:latest
-        env:
-        - name: FRONTEND_ADDR
-          value: "frontend-external:80"
       containers:
-      - name: main
-        image: marciokugler/loadgenerator:v1.1.1
-        env:
-        - name: FRONTEND_ADDR
-          value: "frontend-external:80"
-        - name: USERS
-          value: "10"
-        - name: OTEL_EXPORTER_OTLP_TRACES_ENDPOINT
-          value: "http://appdynamics-otel-collector-service.appdynamics.svc.cluster.local:4317"
-        - name: OTEL_RESOURCE_ATTRIBUTES
-          value: "service.name=webstore-loadgenerator,service.version=1.0.0"
-        resources:
-          requests:
-            cpu: 300m
-            memory: 256Mi
-          limits:
-            cpu: 500m
-            memory: 512Mi
+        - name: main
+          image: marciokugler/loadgenerator:v1.1.2
+          imagePullPolicy: IfNotPresent
+          ports:
+          - containerPort: 8089
+            name: service
+          env:
+          - name: OTEL_EXPORTER_OTLP_TRACES_ENDPOINT
+            value: "http://appdynamics-otel-collector-service.appdynamics.svc.cluster.local:4317"
+          - name: OTEL_RESOURCE_ATTRIBUTES
+            value: "service.name=webstore-loadgenerator,service.version=1.0.0"
+          - name: OTEL_EXPORTER_OTLP_METRICS_TEMPORALITY_PREFERENCE
+            value: cumulative
+          - name: LOCUST_WEB_PORT
+            value: "8089"
+          - name: LOCUST_USERS
+            value: "10"
+          - name: LOCUST_SPAWN_RATE
+            value: "1"
+          - name: LOCUST_HOST
+            value: http://frontend-external:80
+          - name: LOCUST_HEADLESS
+            value: "false"
+          - name: LOCUST_AUTOSTART
+            value: "true"
+          - name: LOCUST_BROWSER_TRAFFIC_ENABLED
+            value: "true"
+          - name: PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION
+            value: python
+          resources:
+            limits:
+              memory: 1Gi
+          volumeMounts:
+      volumes:
+---
+
+---
+# Source: opentelemetry-demo/templates/component.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: loadgenerator
+spec:
+  type: ClusterIP
+  ports:
+    - port: 8089
+      name: tcp-service
+      targetPort: 8089
+---
 ---
