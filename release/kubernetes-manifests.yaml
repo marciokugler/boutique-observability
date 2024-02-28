@@ -33,7 +33,7 @@ spec:
       terminationGracePeriodSeconds: 5
       containers:
       - name: server
-        image: marciokugler/productcatalogservice:v1.1.0
+        image: marciokugler/productcatalogservice:v1.1.1
         ports:
         - containerPort: 3550
         env:
@@ -43,12 +43,6 @@ spec:
           value: "http://appdynamics-otel-collector-service.appdynamics.svc.cluster.local:4317"
         - name: OTEL_RESOURCE_ATTRIBUTES
           value: "service.name=webstore-productcatalogservice,service.version=1.0.0"
-        readinessProbe:
-          exec:
-            command: ["/bin/grpc_health_probe", "-addr=:3550"]
-        livenessProbe:
-          exec:
-            command: ["/bin/grpc_health_probe", "-addr=:3550"]
         resources:
           requests:
             cpu: 100m
@@ -87,7 +81,7 @@ spec:
       terminationGracePeriodSeconds: 5
       containers:
       - name: server
-        image: marciokugler/emailservice:v1.1.0
+        image: marciokugler/emailservice:v1.1.1
         ports:
         - containerPort: 8080
         env:
@@ -97,14 +91,6 @@ spec:
           value: "http://appdynamics-otel-collector-service.appdynamics.svc.cluster.local:4317"
         - name: OTEL_RESOURCE_ATTRIBUTES
           value: "service.name=webstore-emailservice,service.version=1.0.0"
-        readinessProbe:
-          periodSeconds: 5
-          exec:
-            command: ["/bin/grpc_health_probe", "-addr=:8080"]
-        livenessProbe:
-          periodSeconds: 5
-          exec:
-            command: ["/bin/grpc_health_probe", "-addr=:8080"]
         resources:
           requests:
             cpu: 100m
@@ -143,7 +129,7 @@ spec:
       terminationGracePeriodSeconds: 5
       containers:
       - name: server
-        image: marciokugler/cartservice:v1.1.0
+        image: marciokugler/cartservice:v1.1.1
         ports:
         - containerPort: 7070
         env:
@@ -160,15 +146,7 @@ spec:
           limits:
             cpu: 300m
             memory: 128Mi
-        readinessProbe:
-          initialDelaySeconds: 15
-          exec:
-            command: ["/bin/grpc_health_probe", "-addr=:7070", "-rpc-timeout=5s"]
-        livenessProbe:
-          initialDelaySeconds: 15
-          periodSeconds: 10
-          exec:
-            command: ["/bin/grpc_health_probe", "-addr=:7070", "-rpc-timeout=5s"]
+
 ---
 apiVersion: v1
 kind: Service
@@ -195,13 +173,11 @@ spec:
     metadata:
       labels:
         app: frontend
-      annotations:
-        sidecar.istio.io/rewriteAppHTTPProbers: "true"
     spec:
       serviceAccountName: default
       containers:
         - name: server
-          image: marciokugler/frontend:v1.1.0
+          image: marciokugler/frontend:v1.1.1
           ports:
           - containerPort: 8080
           readinessProbe:
@@ -243,8 +219,8 @@ spec:
             value: "service.name=webstore-frontend,service.version=1.0.0"
           # # ENV_PLATFORM: One of: local, gcp, aws, azure, onprem, alibaba
           # # When not set, defaults to "local" unless running in GKE, otherwies auto-sets to gcp 
-          # - name: ENV_PLATFORM 
-          #   value: "aws"
+          - name: ENV_PLATFORM 
+            value: "aws"
           # - name: CYMBAL_BRANDING
           #   value: "true"
           resources:
@@ -298,7 +274,7 @@ spec:
       terminationGracePeriodSeconds: 5
       containers:
       - name: server
-        image: marciokugler/paymentservice:v1.1.0
+        image: marciokugler/paymentservice:v1.1.1
         ports:
         - containerPort: 50051
         env:
@@ -308,12 +284,6 @@ spec:
           value: "http://appdynamics-otel-collector-service.appdynamics.svc.cluster.local:4317"
         - name: OTEL_RESOURCE_ATTRIBUTES
           value: "service.name=webstore-paymentservice,service.version=1.0.0"
-        readinessProbe:
-          exec:
-            command: ["/bin/grpc_health_probe", "-addr=:50051"]
-        livenessProbe:
-          exec:
-            command: ["/bin/grpc_health_probe", "-addr=:50051"]
         resources:
           requests:
             cpu: 100m
@@ -352,17 +322,9 @@ spec:
       terminationGracePeriodSeconds: 5
       containers:
       - name: server
-        image: marciokugler/recommendationservice:v1.1.0
+        image: marciokugler/recommendationservice:v1.1.1
         ports:
         - containerPort: 8080
-        readinessProbe:
-          periodSeconds: 5
-          exec:
-            command: ["/bin/grpc_health_probe", "-addr=:8080"]
-        livenessProbe:
-          periodSeconds: 5
-          exec:
-            command: ["/bin/grpc_health_probe", "-addr=:8080"]
         env:
         - name: PORT
           value: "8080"
@@ -409,7 +371,7 @@ spec:
       serviceAccountName: default
       containers:
       - name: server
-        image: marciokugler/shippingservice:v1.1.0
+        image: marciokugler/shippingservice:v1.1.1
         ports:
         - containerPort: 50051
         env:
@@ -419,13 +381,6 @@ spec:
           value: "http://appdynamics-otel-collector-service.appdynamics.svc.cluster.local:4317"
         - name: OTEL_RESOURCE_ATTRIBUTES
           value: "service.name=webstore-shippingservice,service.version=1.0.0"
-        readinessProbe:
-          periodSeconds: 5
-          exec:
-            command: ["/bin/grpc_health_probe", "-addr=:50051"]
-        livenessProbe:
-          exec:
-            command: ["/bin/grpc_health_probe", "-addr=:50051"]
         resources:
           requests:
             cpu: 100m
@@ -464,7 +419,7 @@ spec:
       terminationGracePeriodSeconds: 5
       containers:
       - name: server
-        image: marciokugler/currencyservice:v1.1.0
+        image: marciokugler/currencyservice:v1.1.1
         ports:
         - name: grpc
           containerPort: 7000
@@ -475,12 +430,6 @@ spec:
           value: "http://appdynamics-otel-collector-service.appdynamics.svc.cluster.local:4317"
         - name: OTEL_RESOURCE_ATTRIBUTES
           value: "service.name=webstore-currencyservice,service.version=1.0.0"
-        readinessProbe:
-          exec:
-            command: ["/bin/grpc_health_probe", "-addr=:7000"]
-        livenessProbe:
-          exec:
-            command: ["/bin/grpc_health_probe", "-addr=:7000"]
         resources:
           requests:
             cpu: 100m
@@ -519,7 +468,7 @@ spec:
       terminationGracePeriodSeconds: 5
       containers:
       - name: server
-        image: marciokugler/adservice:v1.1.0
+        image: marciokugler/adservice:v1.1.1
         ports:
         - containerPort: 9555
         env:
@@ -536,16 +485,7 @@ spec:
           limits:
             cpu: 600m
             memory: 600Mi
-        readinessProbe:
-          initialDelaySeconds: 60
-          periodSeconds: 15
-          exec:
-            command: ["/bin/grpc_health_probe", "-addr=:9555"]
-        livenessProbe:
-          initialDelaySeconds: 60
-          periodSeconds: 15
-          exec:
-            command: ["/bin/grpc_health_probe", "-addr=:9555"]
+
 ---
 apiVersion: v1
 kind: Service
@@ -576,15 +516,9 @@ spec:
       serviceAccountName: default
       containers:
         - name: server
-          image: marciokugler/checkoutservice:v1.1.0
+          image: marciokugler/checkoutservice:v1.1.1
           ports:
           - containerPort: 5050
-          readinessProbe:
-            exec:
-              command: ["/bin/grpc_health_probe", "-addr=:5050"]
-          livenessProbe:
-            exec:
-              command: ["/bin/grpc_health_probe", "-addr=:5050"]
           env:
           - name: PORT
             value: "5050"
@@ -691,8 +625,6 @@ spec:
     metadata:
       labels:
         app: loadgenerator
-      annotations:
-        sidecar.istio.io/rewriteAppHTTPProbers: "true"
     spec:
       serviceAccountName: default
       terminationGracePeriodSeconds: 5
@@ -712,15 +644,19 @@ spec:
         image: busybox:latest
         env:
         - name: FRONTEND_ADDR
-          value: "frontend:80"
+          value: "frontend-external:80"
       containers:
       - name: main
-        image: marciokugler/loadgenerator:v1.1.0
+        image: marciokugler/loadgenerator:v1.1.1
         env:
         - name: FRONTEND_ADDR
-          value: "frontend:80"
+          value: "frontend-external:80"
         - name: USERS
           value: "10"
+        - name: OTEL_EXPORTER_OTLP_TRACES_ENDPOINT
+          value: "http://appdynamics-otel-collector-service.appdynamics.svc.cluster.local:4317"
+        - name: OTEL_RESOURCE_ATTRIBUTES
+          value: "service.name=webstore-loadgenerator,service.version=1.0.0"
         resources:
           requests:
             cpu: 300m
