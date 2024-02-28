@@ -27,8 +27,11 @@ WORKDIR /loadgen
 
 # Add application code.
 COPY locustfile.py .
+COPY people.json .
+ENV LOCUST_PLAYWRIGHT=1
+ENV LOCUST_BROWSER_TRAFFIC_ENABLED="true"
 
 # enable gevent support in debugger
 ENV GEVENT_SUPPORT=True
-
-ENTRYPOINT locust --host="http://${FRONTEND_ADDR}" --headless -u "${USERS:-10}" 2>&1
+RUN playwright install --with-deps chromium
+ENTRYPOINT locust 
