@@ -81,19 +81,13 @@ class WebsiteUser(HttpUser):
         self.client.get("/product/" + random.choice(products))
 
     @task(3)
-    def add_to_cart(self, user=""):
-        if user == "":
-            user = str(uuid.uuid1())
+   
+    def add_to_cart(self):
         product = random.choice(products)
         self.client.get("/product/" + product)
-        cart_item = {
-            "item": {
-                "productId": product,
-                "quantity": random.choice([1, 2, 3, 4, 5, 10]),
-            },
-            "userId": user,
-        }
-        self.client.post("/cart", json=cart_item)
+        self.client.post("/cart", {
+            'product_id': product,
+            'quantity': random.choice([1,2,3,4,5,10])})
     
     @task(4)
     def view_cart(self):
@@ -101,23 +95,21 @@ class WebsiteUser(HttpUser):
         
     @task(5)
     def checkout(self):
-        # checkout call with an item added to cart
-        user = str(uuid.uuid1())
-        self.add_to_cart(user=user)
-        checkout_person = random.choice(people)
-        checkout_person["userId"] = user
-        self.client.post("/checkout", json=checkout_person)
+        self.add_to_cart(self)
+        self.client.post("/cart/checkout", {
+            'email': 'locust-user@example.com',
+            'street_address': '1600 Amphitheatre Parkway',
+            'zip_code': '94043',
+            'city': 'Mountain View',
+            'state': 'CA',
+            'country': 'United States',
+            'credit_card_number': '4432-8015-6152-0454',
+            'credit_card_expiration_month': '1',
+            'credit_card_expiration_year': '2039',
+            'credit_card_cvv': '672',
+        })
 
     @task(6)
-    def checkout_multi(self):
-        # checkout call which adds 2-4 different items to cart before checkout
-        user = str(uuid.uuid1())
-        for i in range(random.choice([2, 3, 4])):
-            self.add_to_cart(user=user)
-        checkout_person = random.choice(people)
-        checkout_person["userId"] = user
-        self.client.post("/checkout", json=checkout_person)
-
     def on_start(self):
         ctx = baggage.set_baggage("synthetic_request", "true")
         context.attach(ctx)
@@ -136,6 +128,7 @@ if browser_traffic_enabled:
             try:
                 page.on("console", lambda msg: print(msg.text))
                 await page.route('**/*', add_baggage_header)
+                await page.goto('/', add_baggage_header, wait_until="domcontentloaded")
                 time.sleep(5)
                 await page.goto("/cart", wait_until="domcontentloaded")
                 time.sleep(5)
@@ -152,7 +145,7 @@ if browser_traffic_enabled:
                 page.on("console", lambda msg: print(msg.text))
                 #Go to root website
                 await page.route('**/*', add_baggage_header)
-                await page.goto("/", wait_until="domcontentloaded")
+                await page.goto('/', add_baggage_header, wait_until="domcontentloaded")
                 time.sleep(5)
                 #Click on the Sunglasses category
                 await page.click('p:has-text("Sunglasses")', wait_until="domcontentloaded")
