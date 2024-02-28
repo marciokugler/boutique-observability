@@ -55,25 +55,25 @@ done < <(find "${SCRIPTDIR}/../src" -mindepth 1 -maxdepth 1 -type d -print0)
 
 log "Successfully built all images."
 
-log "Deploying Otel-Collector and Jaeger:"
+#log "Deploying Otel-Collector and Jaeger:"
 
-docker run -d --rm --network="$networkName" --name jaeger \
-  -e COLLECTOR_ZIPKIN_HOST_PORT=:9411 \
-  -p 5775:5775/udp \
-  -p 6831:6831/udp \
-  -p 6832:6832/udp \
-  -p 5778:5778 \
-  -p 16686:16686 \
-  -p 14250:14250 \
-  -p 14268:14268 \
-  -p 14269:14269 \
-  -p 9411:9411 \
-  jaegertracing/all-in-one:1.31 || true
+#docker run -d --rm --network="$networkName" --name jaeger \
+#  -e COLLECTOR_ZIPKIN_HOST_PORT=:9411 \
+#  -p 5775:5775/udp \
+#  -p 6831:6831/udp \
+#  -p 6832:6832/udp \
+#  -p 5778:5778 \
+#  -p 16686:16686 \
+#  -p 14250:14250 \
+#  -p 14268:14268 \
+#  -p 14269:14269 \
+#  -p 9411:9411 \
+#  jaegertracing/all-in-one:1.31 || true
 
-containername="$otelCollectorName"
-docker run -d --rm --network="$networkName" \
-     --name "$otelCollectorName" \
-     "$otelCollectorName:$TAG" >&2 || true
+#containername="$otelCollectorName"
+#docker run -d --rm --network="$networkName" \
+#     --name "$otelCollectorName" \
+#     "$otelCollectorName:$TAG" >&2 || true
 
 
 log "Deploying Online Boutique:"

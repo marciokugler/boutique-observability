@@ -12,14 +12,18 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-FROM golang:1.17.7-alpine as builder
+FROM golang:1.20-alpine as builder
 RUN apk add --no-cache ca-certificates git
 RUN apk add build-base
 WORKDIR /src
 
+
 # restore dependencies
 COPY go.mod go.sum ./
 RUN go mod download
+RUN go get go.opentelemetry.io/otel
+RUN go get go.opentelemetry.io/otel/trace
+RUN go get go.opentelemetry.io/otel/sdk
 COPY . .
 
 # Skaffold passes in debug-oriented compiler flags

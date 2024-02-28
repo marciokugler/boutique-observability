@@ -8,6 +8,7 @@ import json
 import os
 import random
 import uuid
+import time
 from locust import HttpUser, task, between, TaskSet
 
 from locust_plugins.users.playwright import PlaywrightUser, pw, PageWithRetry, event
@@ -75,22 +76,11 @@ class WebsiteUser(HttpUser):
     def index(self):
         self.client.get("/")
 
-    @task(10)
+    @task(2)
     def browse_product(self):
         self.client.get("/product/" + random.choice(products))
 
     @task(3)
-    def get_ads(self):
-        params = {
-            "contextKeys": [random.choice(categories)],
-        }
-        self.client.get("/data/", params=params)
-
-    @task(3)
-    def view_cart(self):
-        self.client.get("/cart")
-
-    @task(2)
     def add_to_cart(self, user=""):
         if user == "":
             user = str(uuid.uuid1())
@@ -104,8 +94,12 @@ class WebsiteUser(HttpUser):
             "userId": user,
         }
         self.client.post("/cart", json=cart_item)
-
-    @task(1)
+    
+    @task(4)
+    def view_cart(self):
+        self.client.get("/cart")
+        
+    @task(5)
     def checkout(self):
         # checkout call with an item added to cart
         user = str(uuid.uuid1())
@@ -114,7 +108,7 @@ class WebsiteUser(HttpUser):
         checkout_person["userId"] = user
         self.client.post("/checkout", json=checkout_person)
 
-    @task(1)
+    @task(6)
     def checkout_multi(self):
         # checkout call which adds 2-4 different items to cart before checkout
         user = str(uuid.uuid1())
@@ -142,8 +136,11 @@ if browser_traffic_enabled:
             try:
                 page.on("console", lambda msg: print(msg.text))
                 await page.route('**/*', add_baggage_header)
+                time.sleep(5)
                 await page.goto("/cart", wait_until="domcontentloaded")
+                time.sleep(5)
                 await page.select_option('[name="currency_code"]', 'CHF')
+                time.sleep(5)
                 await page.wait_for_timeout(2000)  # giving the browser time to export the traces
             except:
                 pass
@@ -153,10 +150,19 @@ if browser_traffic_enabled:
         async def add_product_to_cart(self, page: PageWithRetry):
             try:
                 page.on("console", lambda msg: print(msg.text))
+                #Go to root website
                 await page.route('**/*', add_baggage_header)
                 await page.goto("/", wait_until="domcontentloaded")
-                await page.click('p:has-text("Roof Binoculars")', wait_until="domcontentloaded")
+                time.sleep(5)
+                #Click on the Sunglasses category
+                await page.click('p:has-text("Sunglasses")', wait_until="domcontentloaded")
+                time.sleep(5)
+                #Add to Cart
                 await page.click('button:has-text("Add To Cart")', wait_until="domcontentloaded")
+                time.sleep(5)
+                #Place order
+                await page.click('button:has-text("Place Order")', wait_until="domcontentloaded")
+                time.sleep(5)
                 await page.wait_for_timeout(2000)  # giving the browser time to export the traces
             except:
                 pass
