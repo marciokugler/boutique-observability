@@ -24,7 +24,7 @@ spec:
           - containerPort: 8089
             name: service
           env:
-          - name: OTEL_EXPORTER_OTLP_TRACES_ENDPOINT
+          - name: OTEL_EXPORTER_OTLP_ENDPOINT
             value: "http://appdynamics-otel-collector-service.appdynamics.svc.cluster.local:4317"
           - name: OTEL_RESOURCE_ATTRIBUTES
             value: "service.name=webstore-loadgenerator,service.version=1.0.0"
@@ -37,7 +37,7 @@ spec:
           - name: LOCUST_SPAWN_RATE
             value: "1"
           - name: LOCUST_HOST
-            value: http://frontend-external:80
+            value: http://frontend:80
           - name: LOCUST_HEADLESS
             value: "false"
           - name: LOCUST_AUTOSTART

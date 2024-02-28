@@ -77,14 +77,7 @@ class WebsiteUser(HttpUser):
 
     @task(10)
     def browse_product(self):
-        self.client.get("/products/" + random.choice(products))
-
-    @task(3)
-    def get_recommendations(self):
-        params = {
-            "productIds": [random.choice(products)],
-        }
-        self.client.get("/recommendations", params=params)
+        self.client.get("/product/" + random.choice(products))
 
     @task(3)
     def get_ads(self):
@@ -102,7 +95,7 @@ class WebsiteUser(HttpUser):
         if user == "":
             user = str(uuid.uuid1())
         product = random.choice(products)
-        self.client.get("/products/" + product)
+        self.client.get("/product/" + product)
         cart_item = {
             "item": {
                 "productId": product,

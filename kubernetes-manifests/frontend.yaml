@@ -64,7 +64,7 @@ spec:
             value: "checkoutservice:5050"
           - name: AD_SERVICE_ADDR
             value: "adservice:9555"
-          - name: OTEL_EXPORTER_OTLP_TRACES_ENDPOINT
+          - name: OTEL_EXPORTER_OTLP_ENDPOINT
             value: "http://appdynamics-otel-collector-service.appdynamics.svc.cluster.local:4317"
           - name: OTEL_RESOURCE_ATTRIBUTES
             value: "service.name=webstore-frontend,service.version=1.0.0"
