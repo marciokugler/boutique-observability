@@ -33,14 +33,14 @@ spec:
       terminationGracePeriodSeconds: 5
       containers:
       - name: server
-        image: marciokugler/productcatalogservice:v1.0.3
+        image: marciokugler/productcatalogservice:v1.0.4
         ports:
         - containerPort: 3550
         env:
         - name: PORT
           value: "3550"
         - name: OTEL_EXPORTER_OTLP_TRACES_ENDPOINT
-          value: "http://otelcollector:4317"
+          value: "http://appdynamics-otel-collector-service.appdynamics.svc.cluster.local:4317"
         - name: OTEL_RESOURCE_ATTRIBUTES
           value: "service.name=productcatalogservice,service.version=1.0.0"
         readinessProbe:
@@ -87,14 +87,14 @@ spec:
       terminationGracePeriodSeconds: 5
       containers:
       - name: server
-        image: marciokugler/emailservice:v1.0.3
+        image: marciokugler/emailservice:v1.0.4
         ports:
         - containerPort: 8080
         env:
         - name: PORT
           value: "8080"
         - name: OTEL_EXPORTER_OTLP_TRACES_ENDPOINT
-          value: "http://otelcollector:4317"
+          value: "http://appdynamics-otel-collector-service.appdynamics.svc.cluster.local:4317"
         - name: OTEL_RESOURCE_ATTRIBUTES
           value: "service.name=emailservice,service.version=1.0.0"
         readinessProbe:
@@ -143,14 +143,14 @@ spec:
       terminationGracePeriodSeconds: 5
       containers:
       - name: server
-        image: marciokugler/cartservice:v1.0.3
+        image: marciokugler/cartservice:v1.0.4
         ports:
         - containerPort: 7070
         env:
         - name: REDIS_ADDR
           value: "redis-cart:6379"
         - name: OTEL_EXPORTER_OTLP_ENDPOINT
-          value: "http://otelcollector:4317"
+          value: "http://appdynamics-otel-collector-service.appdynamics.svc.cluster.local:4317"
         - name: OTEL_RESOURCE_ATTRIBUTES
           value: "service.name=cartservice,service.version=1.0.0"
         resources:
@@ -201,7 +201,7 @@ spec:
       serviceAccountName: default
       containers:
         - name: server
-          image: marciokugler/frontend:v1.0.3
+          image: marciokugler/frontend:v1.0.4
           ports:
           - containerPort: 8080
           readinessProbe:
@@ -238,7 +238,7 @@ spec:
           - name: AD_SERVICE_ADDR
             value: "adservice:9555"
           - name: OTEL_EXPORTER_OTLP_TRACES_ENDPOINT
-            value: "http://otelcollector:4317"
+            value: "http://appdynamics-otel-collector-service.appdynamics.svc.cluster.local:4317"
           - name: OTEL_RESOURCE_ATTRIBUTES
             value: "service.name=frontend,service.version=1.0.0"
           # # ENV_PLATFORM: One of: local, gcp, aws, azure, onprem, alibaba
@@ -298,14 +298,14 @@ spec:
       terminationGracePeriodSeconds: 5
       containers:
       - name: server
-        image: marciokugler/paymentservice:v1.0.3
+        image: marciokugler/paymentservice:v1.0.4
         ports:
         - containerPort: 50051
         env:
         - name: PORT
           value: "50051"
         - name: OTEL_EXPORTER_OTLP_TRACES_ENDPOINT
-          value: "http://otelcollector:4317"
+          value: "http://appdynamics-otel-collector-service.appdynamics.svc.cluster.local:4317"
         - name: OTEL_RESOURCE_ATTRIBUTES
           value: "service.name=paymentservice,service.version=1.0.0"
         readinessProbe:
@@ -352,7 +352,7 @@ spec:
       terminationGracePeriodSeconds: 5
       containers:
       - name: server
-        image: marciokugler/recommendationservice:v1.0.3
+        image: marciokugler/recommendationservice:v1.0.4
         ports:
         - containerPort: 8080
         readinessProbe:
@@ -409,7 +409,7 @@ spec:
       serviceAccountName: default
       containers:
       - name: server
-        image: marciokugler/shippingservice:v1.0.3
+        image: marciokugler/shippingservice:v1.0.4
         ports:
         - containerPort: 50051
         env:
@@ -464,7 +464,7 @@ spec:
       terminationGracePeriodSeconds: 5
       containers:
       - name: otelcollector
-        image: marciokugler/otelcollector:v1.0.3
+        image: marciokugler/otelcollector:v1.0.4
         ports:
         - containerPort: 1888
         - containerPort: 8888
@@ -525,7 +525,7 @@ spec:
       terminationGracePeriodSeconds: 5
       containers:
       - name: server
-        image: marciokugler/currencyservice:v1.0.3
+        image: marciokugler/currencyservice:v1.0.4
         ports:
         - name: grpc
           containerPort: 7000
@@ -533,7 +533,7 @@ spec:
         - name: PORT
           value: "7000"
         - name: OTEL_EXPORTER_OTLP_TRACES_ENDPOINT
-          value: "http://otelcollector:4317"
+          value: "http://appdynamics-otel-collector-service.appdynamics.svc.cluster.local:4317"
         - name: OTEL_RESOURCE_ATTRIBUTES
           value: "service.name=currencyservice,service.version=1.0.0"
         readinessProbe:
@@ -580,14 +580,14 @@ spec:
       terminationGracePeriodSeconds: 5
       containers:
       - name: server
-        image: marciokugler/adservice:v1.0.3
+        image: marciokugler/adservice:v1.0.4
         ports:
         - containerPort: 9555
         env:
         - name: PORT
           value: "9555"
         - name: OTEL_EXPORTER_OTLP_TRACES_ENDPOINT
-          value: "http://otelcollector:4317"
+          value: "http://appdynamics-otel-collector-service.appdynamics.svc.cluster.local:4317"
         - name: OTEL_RESOURCE_ATTRIBUTES
           value: "service.name=adservice,service.version=1.0.0"
         resources:
@@ -637,7 +637,7 @@ spec:
       serviceAccountName: default
       containers:
         - name: server
-          image: marciokugler/checkoutservice:v1.0.3
+          image: marciokugler/checkoutservice:v1.0.4
           ports:
           - containerPort: 5050
           readinessProbe:
@@ -662,7 +662,7 @@ spec:
           - name: CART_SERVICE_ADDR
             value: "cartservice:7070"
           - name: OTEL_EXPORTER_OTLP_TRACES_ENDPOINT
-            value: "http://otelcollector:4317"
+            value: "http://appdynamics-otel-collector-service.appdynamics.svc.cluster.local:4317"
           - name: OTEL_RESOURCE_ATTRIBUTES
             value: "service.name=checkoutservice,service.version=1.0.0"
           resources:
@@ -776,7 +776,7 @@ spec:
           value: "frontend:80"
       containers:
       - name: main
-        image: marciokugler/loadgenerator:v1.0.3
+        image: marciokugler/loadgenerator:v1.0.4
         env:
         - name: FRONTEND_ADDR
           value: "frontend:80"
