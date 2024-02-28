@@ -36,9 +36,9 @@ spec:
         - name: PORT
           value: "9555"
         - name: OTEL_EXPORTER_OTLP_TRACES_ENDPOINT
-          value: "http://otelcollector:4317"
+          value: "http://appdynamics-otel-collector-service.appdynamics.svc.cluster.local:4317"
         - name: OTEL_RESOURCE_ATTRIBUTES
-          value: "service.name=adservice,service.version=1.0.0"
+          value: "service.name=webstore-adservice,service.version=1.0.0"
         resources:
           requests:
             cpu: 400m

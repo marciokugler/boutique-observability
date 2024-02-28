@@ -31,7 +31,7 @@ check_network() {
 
 TAG="${TAG:?TAG env variable must be specified}"
 networkName=online-boutique
-otelCollectorName=otelcollector
+otelCollectorName="appdynamics-otel-collector-service.appdynamics.svc.cluster.local"
 otelCollector="http://$otelCollectorName:4317"
 
 check_network

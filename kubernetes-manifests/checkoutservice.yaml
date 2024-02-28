@@ -53,9 +53,9 @@ spec:
           - name: CART_SERVICE_ADDR
             value: "cartservice:7070"
           - name: OTEL_EXPORTER_OTLP_TRACES_ENDPOINT
-            value: "http://otelcollector:4317"
+            value: "http://appdynamics-otel-collector-service.appdynamics.svc.cluster.local:4317"
           - name: OTEL_RESOURCE_ATTRIBUTES
-            value: "service.name=checkoutservice,service.version=1.0.0"
+            value: "service.name=webstore-checkoutservice,service.version=1.0.0"
           resources:
             requests:
               cpu: 100m

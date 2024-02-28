@@ -36,9 +36,9 @@ spec:
         - name: PORT
           value: "50051"
         - name: OTEL_EXPORTER_OTLP_TRACES_ENDPOINT
-          value: "http://otelcollector:4317"
+          value: "http://appdynamics-otel-collector-service.appdynamics.svc.cluster.local:4317"
         - name: OTEL_RESOURCE_ATTRIBUTES
-          value: "service.name=paymentservice,service.version=1.0.0"
+          value: "service.name=webstore-paymentservice,service.version=1.0.0"
         readinessProbe:
           exec:
             command: ["/bin/grpc_health_probe", "-addr=:50051"]
