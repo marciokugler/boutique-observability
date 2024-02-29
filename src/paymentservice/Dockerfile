@@ -26,7 +26,10 @@ RUN apk add --update --no-cache \
 WORKDIR /usr/src/app
 
 COPY package*.json ./
-
+RUN npm install --save @opentelemetry/resource-detector-container
+RUN npm install --save @opentelemetry/exporter-metrics-otlp-grpc
+RUN npm install --save @opentelemetry/sdk-metrics
+RUN npm install --save @opentelemetry/resources
 RUN npm install --only=production
 
 FROM base
