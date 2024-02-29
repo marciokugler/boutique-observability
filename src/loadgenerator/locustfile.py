@@ -129,11 +129,11 @@ if browser_traffic_enabled:
                 page.on("console", lambda msg: print(msg.text))
                 await page.route('**/*', add_baggage_header)
                 await page.goto('/', add_baggage_header, wait_until="domcontentloaded")
-                time.sleep(5)
+                
                 await page.goto("/cart", wait_until="domcontentloaded")
-                time.sleep(5)
+                
                 await page.select_option('[name="currency_code"]', 'CHF')
-                time.sleep(5)
+                
                 await page.wait_for_timeout(2000)  # giving the browser time to export the traces
             except:
                 pass
