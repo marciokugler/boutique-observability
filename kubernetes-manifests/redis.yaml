@@ -30,11 +30,6 @@ spec:
         image: redis:alpine
         ports:
         - containerPort: 6379
-        env:
-        - name: OTEL_EXPORTER_OTLP_ENDPOINT
-          value: "http://appdynamics-otel-collector-service.appdynamics.svc.cluster.local:4317"
-        - name: OTEL_RESOURCE_ATTRIBUTES
-          value: "service.name=webstore-redis,service.version=1.0.0"
         readinessProbe:
           periodSeconds: 5
           tcpSocket:

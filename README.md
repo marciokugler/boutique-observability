@@ -3,7 +3,12 @@
 <p align="center">
 <img src="src/frontend/static/icons/Hipster_HeroLogoCyan.svg" width="300" alt="Online Boutique" />
 </p>
+---
 
+## This repo was modified and all opentelemetry instrumentation was removed. 
+All otel dependencies have been removed. 
+
+---
 ---
 
 ## This repo was modified and it is used to demonstrate OpenTelemetry capabilities

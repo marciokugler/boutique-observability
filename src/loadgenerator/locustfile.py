@@ -21,19 +21,6 @@ from http.client import HTTPConnection
 import sys
 
 
-#exporter = OTLPMetricExporter(insecure=True)
-#set_meter_provider(MeterProvider([PeriodicExportingMetricReader(exporter)]))
-
-#tracer_provider = TracerProvider()
-#trace.set_tracer_provider(tracer_provider)
-#tracer_provider.add_span_processor(BatchSpanProcessor(OTLPSpanExporter()))
-
-# Instrumenting manually to avoid error with locust gevent monkey
-#Jinja2Instrumentor().instrument()
-#RequestsInstrumentor().instrument()
-#SystemMetricsInstrumentor().instrument()
-#URLLib3Instrumentor().instrument()
-
 categories = [
     "binoculars",
     "telescopes",
