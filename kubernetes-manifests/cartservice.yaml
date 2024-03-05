@@ -35,10 +35,6 @@ spec:
         env:
         - name: REDIS_ADDR
           value: "redis-cart:6379"
-        - name: OTEL_EXPORTER_OTLP_ENDPOINT
-          value: "http://appdynamics-otel-collector-service.appdynamics.svc.cluster.local:4317"
-        - name: OTEL_RESOURCE_ATTRIBUTES
-          value: "service.name=webstore-cartservice,service.version=1.0.0"
         resources:
           requests:
             cpu: 200m
