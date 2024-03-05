@@ -21,10 +21,10 @@ WORKDIR /src
 # restore dependencies
 COPY go.mod go.sum ./
 RUN go mod download
-RUN go get go.opentelemetry.io/otel
-RUN go get go.opentelemetry.io/otel/trace
-RUN go get go.opentelemetry.io/otel/sdk
+
 COPY . .
+RUN export GRPC_GO_LOG_VERBOSITY_LEVEL=99
+RUN export GRPC_GO_LOG_SEVERITY_LEVEL=info
 
 # Skaffold passes in debug-oriented compiler flags
 ARG SKAFFOLD_GO_GCFLAGS
@@ -42,6 +42,6 @@ COPY ./static ./static
 # Default behavior - a failure prints a stack trace for the current goroutine.
 # See https://golang.org/pkg/runtime/
 ENV GOTRACEBACK=single
-
 EXPOSE 8080
+
 ENTRYPOINT ["/src/server"]

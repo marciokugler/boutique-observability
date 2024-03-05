@@ -25,10 +25,7 @@ RUN apt-get -qq update \
     && apt-get install -y --no-install-recommends \
     wget
 
-# download the grpc health probe
-RUN GRPC_HEALTH_PROBE_VERSION=v0.4.7 && \
-    wget -qO/bin/grpc_health_probe https://github.com/grpc-ecosystem/grpc-health-probe/releases/download/${GRPC_HEALTH_PROBE_VERSION}/grpc_health_probe-linux-amd64 && \
-    chmod +x /bin/grpc_health_probe
+
 
 WORKDIR /recommendationservice
 
@@ -38,5 +35,6 @@ COPY . .
 # set listen port
 ENV PORT "8080"
 EXPOSE 8080
+ENV PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION=python
 
-ENTRYPOINT ["opentelemetry-instrument", "python", "recommendation_server.py"]
+ENTRYPOINT ["python", "recommendation_server.py"]

@@ -31,7 +31,7 @@ check_network() {
 
 TAG="${TAG:?TAG env variable must be specified}"
 networkName=online-boutique
-otelCollectorName="appdynamics-otel-collector-service.appdynamics.svc.cluster.local"
+otelCollectorName="otelcollector"
 otelCollector="http://$otelCollectorName:4317"
 
 check_network
@@ -70,10 +70,13 @@ log "Successfully built all images."
 #  -p 9411:9411 \
 #  jaegertracing/all-in-one:1.31 || true
 
-#containername="$otelCollectorName"
-#docker run -d --rm --network="$networkName" \
+containername="$otelCollectorName"
+#docker run -v "${PWD}/otel-local-config.yaml":/otel-local-config.yaml \
+#     -d --rm --network="$networkName" \
 #     --name "$otelCollectorName" \
+#     --config otel-local-config.yaml \
 #     "$otelCollectorName:$TAG" >&2 || true
+
 
 
 log "Deploying Online Boutique:"
@@ -89,7 +92,6 @@ run "-p 9555 -e PORT=9555 \
 
 containername=cartservice
 run "-p 7070 -e REDIS_ADDR=redis-cart:6379 \
-     -e OTEL_EXPORTER_OTLP_ENDPOINT=$otelCollector \
      " "$containername"
 
 containername=checkoutservice
@@ -107,7 +109,6 @@ run "-p 7000 -e PORT=7000 \
 
 containername=emailservice
 run "-p 8080 -e PORT=8080 \
-     -e OTEL_PYTHON_LOG_CORRELATION=true \
      " "$containername"
 
 containername=frontend
@@ -125,12 +126,12 @@ run "-p 50051 -e PORT=50051 \
      " "$containername"
 
 containername=productcatalogservice
+#run "-p 3550 -e PORT=3550 \
 run "-p 3550 -e PORT=3550 \
-     " "$containername"
+" "$containername"
 
 containername=recommendationservice
 run "-p 8080 -e PORT=8080 \
-     -e OTEL_PYTHON_LOG_CORRELATION=true \
      -e PRODUCT_CATALOG_SERVICE_ADDR=productcatalogservice:3550 \
      " "$containername"
 
@@ -140,4 +141,6 @@ run "-p 50051 -e PORT=50051 \
 
 containername=loadgenerator
 run "-e FRONTEND_ADDR=frontend:8080 \
+     -p 8089:8089 \
+     -e PORT=8089
      -e USERS=10" "$containername"

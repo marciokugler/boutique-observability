@@ -11,12 +11,13 @@ RUN apt-get -qq update \
 
 COPY ./requirements.txt .
 RUN pip install --prefix="/reqs" -r requirements.txt
-
+RUN export LOCUST_BROWSER_TRAFFIC_ENABLED=true
 FROM base
 WORKDIR /usr/src/app/
 COPY --from=builder /reqs /usr/local
 COPY ./locustfile.py .
-COPY ./people.json .
 ENV LOCUST_PLAYWRIGHT=1
 RUN playwright install --with-deps chromium
-ENTRYPOINT locust
+ENV PORT "8089"
+EXPOSE 8089
+ENTRYPOINT ["locust", "-f", "locustfile.py", "--host", "http://frontend:8080"]

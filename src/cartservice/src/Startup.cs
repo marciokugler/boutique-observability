@@ -7,7 +7,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using cartservice.cartstore;
 using cartservice.services;
-using OpenTelemetry.Trace;
+
 
 namespace cartservice
 {
@@ -40,15 +40,6 @@ namespace cartservice
             Console.WriteLine("Initialization completed");
 
             services.AddSingleton<ICartStore>(cartStore);
-
-            services.AddOpenTelemetryTracing((builder) => builder
-                .AddRedisInstrumentation(
-                    cartStore.GetConnection(),
-                    options => options.SetVerboseDatabaseStatements = true)
-                .AddAspNetCoreInstrumentation()
-                .AddGrpcClientInstrumentation()
-                .AddHttpClientInstrumentation()
-                .AddOtlpExporter());
 
             services.AddGrpc();
         }

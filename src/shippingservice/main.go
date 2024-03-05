@@ -27,11 +27,7 @@ import (
 	"google.golang.org/grpc/reflection"
 	"google.golang.org/grpc/status"
 
-	"go.opentelemetry.io/contrib/instrumentation/google.golang.org/grpc/otelgrpc"
-	"go.opentelemetry.io/otel"
-	"go.opentelemetry.io/otel/exporters/otlp/otlptrace/otlptracegrpc"
-	"go.opentelemetry.io/otel/propagation"
-	sdktrace "go.opentelemetry.io/otel/sdk/trace"
+
 
 	pb "github.com/GoogleCloudPlatform/microservices-demo/src/shippingservice/genproto/hipstershop"
 	healthpb "google.golang.org/grpc/health/grpc_health_v1"
@@ -56,7 +52,7 @@ func init() {
 	}
 	log.Out = os.Stdout
 }
-
+/*
 func InitTracerProvider() *sdktrace.TracerProvider {
 	ctx := context.Background()
 
@@ -72,15 +68,16 @@ func InitTracerProvider() *sdktrace.TracerProvider {
 	otel.SetTextMapPropagator(propagation.NewCompositeTextMapPropagator(propagation.TraceContext{}, propagation.Baggage{}))
 	return tp
 }
-
+*/
 func main() {
+	/*
 	tp := InitTracerProvider()
 	defer func() {
 		if err := tp.Shutdown(context.Background()); err != nil {
 			log.Printf("Error shutting down tracer provider: %v", err)
 		}
 	}()
-
+*/
 	port := defaultPort
 	if value, ok := os.LookupEnv("PORT"); ok {
 		port = value
@@ -93,8 +90,8 @@ func main() {
 	}
 
 	var srv *grpc.Server = grpc.NewServer(
-		grpc.UnaryInterceptor(otelgrpc.UnaryServerInterceptor()),
-		grpc.StreamInterceptor(otelgrpc.StreamServerInterceptor()),
+		//grpc.UnaryInterceptor(otelgrpc.UnaryServerInterceptor()),
+		//grpc.StreamInterceptor(otelgrpc.StreamServerInterceptor()),
 	)
 
 	svc := &server{}

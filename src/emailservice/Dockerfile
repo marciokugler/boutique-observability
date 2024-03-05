@@ -36,4 +36,5 @@ WORKDIR /email_server
 COPY . .
 
 EXPOSE 8080
-ENTRYPOINT [ "opentelemetry-instrument", "python", "email_server.py" ]
+ENV PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION=python
+ENTRYPOINT [ "python", "email_server.py" ]

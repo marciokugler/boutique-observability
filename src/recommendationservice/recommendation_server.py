@@ -20,23 +20,15 @@ import time
 from concurrent import futures
 
 import grpc
-
+from grpc_health.v1 import health_pb2 as health_pb2
+from grpc_health.v1 import health_pb2_grpc as health_pb2_grpc
 import demo_pb2
 import demo_pb2_grpc
-from grpc_health.v1 import health_pb2
-from grpc_health.v1 import health_pb2_grpc
-
-from opentelemetry import trace
-from opentelemetry.sdk.trace import TracerProvider
-from opentelemetry.sdk.trace.export import (BatchSpanProcessor)
-from opentelemetry.exporter.otlp.proto.grpc.trace_exporter import OTLPSpanExporter
 
 from logger import getJSONLogger
 logger = getJSONLogger('recommendationservice-server')
 
-tracer_provider = TracerProvider()
-trace.set_tracer_provider(tracer_provider)
-tracer_provider.add_span_processor(BatchSpanProcessor(OTLPSpanExporter()))
+
 
 
 class RecommendationService(demo_pb2_grpc.RecommendationServiceServicer):
