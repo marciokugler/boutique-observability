@@ -1,4 +1,4 @@
-# Source: opentelemetry-demo/templates/component.yaml
+
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -54,7 +54,7 @@ spec:
 ---
 
 ---
-# Source: opentelemetry-demo/templates/component.yaml
+
 apiVersion: v1
 kind: Service
 metadata:

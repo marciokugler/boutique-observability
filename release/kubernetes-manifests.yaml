@@ -33,7 +33,7 @@ spec:
       terminationGracePeriodSeconds: 5
       containers:
       - name: server
-        image: marciokugler/productcatalogservice:v1.1.15
+        image: marciokugler/productcatalogservice:v1.1.18
         ports:
         - containerPort: 3550
         env:
@@ -81,7 +81,7 @@ spec:
       terminationGracePeriodSeconds: 5
       containers:
       - name: server
-        image: marciokugler/emailservice:v1.1.15
+        image: marciokugler/emailservice:v1.1.18
         ports:
         - containerPort: 8080
         env:
@@ -129,7 +129,7 @@ spec:
       terminationGracePeriodSeconds: 5
       containers:
       - name: server
-        image: marciokugler/cartservice:v1.1.15
+        image: marciokugler/cartservice:v1.1.18
         ports:
         - containerPort: 7070
         env:
@@ -177,7 +177,7 @@ spec:
       serviceAccountName: default
       containers:
         - name: server
-          image: marciokugler/frontend:v1.1.15
+          image: marciokugler/frontend:v1.1.18
           ports:
           - containerPort: 8080
           readinessProbe:
@@ -274,7 +274,7 @@ spec:
       terminationGracePeriodSeconds: 5
       containers:
       - name: server
-        image: marciokugler/paymentservice:v1.1.15
+        image: marciokugler/paymentservice:v1.1.18
         ports:
         - containerPort: 50051
         env:
@@ -322,7 +322,7 @@ spec:
       terminationGracePeriodSeconds: 5
       containers:
       - name: server
-        image: marciokugler/recommendationservice:v1.1.15
+        image: marciokugler/recommendationservice:v1.1.18
         ports:
         - containerPort: 8080
         env:
@@ -371,7 +371,7 @@ spec:
       serviceAccountName: default
       containers:
       - name: server
-        image: marciokugler/shippingservice:v1.1.15
+        image: marciokugler/shippingservice:v1.1.18
         ports:
         - containerPort: 50051
         env:
@@ -419,7 +419,7 @@ spec:
       terminationGracePeriodSeconds: 5
       containers:
       - name: server
-        image: marciokugler/currencyservice:v1.1.15
+        image: marciokugler/currencyservice:v1.1.18
         ports:
         - name: grpc
           containerPort: 7000
@@ -468,7 +468,7 @@ spec:
       terminationGracePeriodSeconds: 5
       containers:
       - name: server
-        image: marciokugler/adservice:v1.1.15
+        image: marciokugler/adservice:v1.1.18
         ports:
         - containerPort: 9555
         env:
@@ -516,7 +516,7 @@ spec:
       serviceAccountName: default
       containers:
         - name: server
-          image: marciokugler/checkoutservice:v1.1.15
+          image: marciokugler/checkoutservice:v1.1.18
           ports:
           - containerPort: 5050
           env:
@@ -636,7 +636,7 @@ spec:
       restartPolicy: Always
       containers:
         - name: main
-          image: marciokugler/loadgenerator:v1.1.15
+          image: marciokugler/loadgenerator:v1.1.18
           imagePullPolicy: IfNotPresent
           ports:
           - containerPort: 8089
@@ -672,7 +672,7 @@ spec:
 ---
 
 ---
-# Source: opentelemetry-demo/templates/component.yaml
+
 apiVersion: v1
 kind: Service
 metadata:

@@ -39,7 +39,9 @@ COPY products.json .
 # Default behavior - a failure prints a stack trace for the current goroutine.
 # See https://golang.org/pkg/runtime/
 ENV GOTRACEBACK=single
-
+ENV PORT "3550"
 EXPOSE 3550
+RUN export GRPC_GO_LOG_VERBOSITY_LEVEL=99
+RUN export GRPC_GO_LOG_SEVERITY_LEVEL=info
 ENTRYPOINT ["/src/server"]
 
